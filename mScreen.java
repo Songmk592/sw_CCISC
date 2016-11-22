@@ -48,6 +48,8 @@ class MainFrame extends JFrame {
 	
 	////////////////////////////
 	
+	private JButton moveUserPageBtn;//
+	
 	
 	ImageIcon productIcon = new ImageIcon("src/img/product1.png");// 상품관리버튼의 이미지
 	ImageIcon productIcon2 = new ImageIcon("src/img/product2.png");// 상품관리버튼의
@@ -213,6 +215,13 @@ class MainFrame extends JFrame {
 		userSearchPanel.add(salesEmptyLabel3);
 		userSearchPanel.add(userbackHomeBtn);
 		///////////////////////
+		
+		
+		
+//////////
+	moveUserPageBtn = new JButton("Back");
+	moveUserPageBtn.setBounds(770, 400, 100, 30);
+	moveUserPageBtn.addActionListener(new myListener());
 		addDel1 = new JButton("상품추가/삭제");// 상품추가/삭제 버튼
 		addDel1.setBounds(170, 400, 120, 30);
 		stockManageBtn = new JButton("재고관리");
@@ -296,6 +305,8 @@ class MainFrame extends JFrame {
 		c.weighty = 3.0;
 		c.fill = GridBagConstraints.HORIZONTAL;// 남은공간을 수평방향으로 채운다.
 		searchMe.add(searchScopeTextField, c);
+		
+		
 		salesSearchPanel.setLayout(new GridLayout(1, 4, 5, 5));// 1행4열의 그리드
 																// 레이아웃/* 여기서부터
 		salesSearchPanel.add(salesSearchScopeLabel);
@@ -394,9 +405,15 @@ class MainFrame extends JFrame {
 					flag2 = 1;
 
 					if (compare >= 0 && compare <= 99999999 && id.length() == 8) {
+						
 						mainFramePanel.removeAll();
 						chan.setBounds(0, 0, 1000, 550);
 						chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
+						
+						
+						userHotItem2.setText("?");
+						userHotItem4.setText("?");
+						userHotItem6.setText("?");
 						userHotItemPanel.setLayout(new GridLayout(3,2,5,5));
 						userHotItem1.setFont(f1);
 						userHotItem2.setFont(f1);
@@ -475,6 +492,10 @@ class MainFrame extends JFrame {
 				mainFramePanel.add(salesManageBtn);
 				mainFramePanel.add(manageBtn);
 				mainFramePanel.add(pageback);
+				 model = new DefaultTableModel(content, head); // 여기부터
+				 ta1 = new JTable(model);
+				 jp = new JScrollPane(ta1);
+				 jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL 값으로 초기화
 				mainFramePanel.updateUI();// 화면업데이트
 			} // 로그인 화면이 아닌곳에서 기능선택 페이지로 넘어감
 			if (e.getSource() == backHomeBtn) {
@@ -505,6 +526,7 @@ class MainFrame extends JFrame {
 				mainFramePanel.removeAll();
 				mainFramePanel.add(moveMainPageBtn2);
 				mainFramePanel.add(salesTab1);
+				
 				mainFramePanel.updateUI();
 			} // 매출관리화면으로 넘어감
 			if (e.getSource() == manageBtn) {
@@ -569,15 +591,102 @@ class MainFrame extends JFrame {
 				
 				}
 			}
-//			if (e.getSource() == userProductSearch) {
-//				try {
-//					userHotItem.userHotItemp();
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				
-//				}
-//			}
+			if (e.getSource() == moveUserPageBtn) {
+				
+				mainFramePanel.removeAll();
+				chan.setBounds(0, 0, 1000, 550);
+				chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
+				userHotItemPanel.setLayout(new GridLayout(3,2,5,5));
+				userHotItem1.setFont(f1);
+				userHotItem2.setFont(f1);
+				userHotItem3.setFont(f1);
+				userHotItem4.setFont(f1);
+				userHotItem5.setFont(f1);
+				userHotItem6.setFont(f1);
+				userHotItemPanel.add(userHotItem1);
+				userHotItemPanel.add(userHotItem2);
+				userHotItemPanel.add(userHotItem3);
+				userHotItemPanel.add(userHotItem4);
+				userHotItemPanel.add(userHotItem5);
+				userHotItemPanel.add(userHotItem6);
+				
+				
+				 model = new DefaultTableModel(content, head); // 여기부터
+				 ta1 = new JTable(model);
+				 jp = new JScrollPane(ta1);
+				 jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL 값으로 초기화
+				
+				
+				mainFramePanel.setLayout(new BorderLayout());
+				mainFramePanel.add(userSearchPanel, BorderLayout.AFTER_LAST_LINE);
+				
+				mainFramePanel.add(userHotItemPanel, BorderLayout.CENTER);
+				
+			
+				mainFramePanel.updateUI();
+			}
+			if (e.getSource() == userProductSearch) {
+				/////////////////////////////////////////////////////////////////////////////////////////////////////
+				
+				 mainFramePanel.removeAll();
+				 chan.setBounds(0, 0, 1000, 550);
+					chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
+					//userHotItem2.setText("?"); // 상품조회후 다시 돌아왔을때 물음표가 떠야하나? 같이 물어보고 고치기
+					//userHotItem4.setText("?");
+					//userHotItem6.setText("?");
+					mainFramePanel.add(moveUserPageBtn);
+					mainFramePanel.add(jp);
+					mainFramePanel.add(searchMe);
+					mainFramePanel.add(productTypeSearch);
+					mainFramePanel.add(choiceSearch);
+					searchMe.setBounds(200, 30, 350, 60);
+			
+					
+					mainFramePanel.setLayout(null); /////////////////이걸 넣어야 오류안남 ㅠㅠㅠ 왜?ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ
+					mainFramePanel.updateUI();
+						
+				
+				
+				/*
+				userJp.setBounds(180, 120, 600, 250);
+					mainFramePanel.removeAll();
+					chan.setBounds(0, 0, 1000, 550);
+					chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
+					
+					
+					
+					
+					userProductPanel.add(moveMainPageBtn2);
+					userProductPanel.add(userJp);
+					userProductPanel.add(userSearch);
+					userProductPanel.add(productTypeSearch);
+					userProductPanel.add(choiceSearch);
+					userSearch.setBounds(200, 30, 350, 60);
+					// userProductPanel.add(moveMainPageBtn);
+					// userProductPanel.add(addDel1);
+					//userProductPanel.add(stockManageBtn);
+					mainFramePanel.setLayout(new BorderLayout());
+					mainFramePanel.add(userProductPanel);
+					mainFramePanel.updateUI();
+					//userHotItem.userHotItemp();
+					/*
+					 
+					 mainFramePanel.removeAll();
+				mainFramePanel.add(moveMainPageBtn2);
+				mainFramePanel.add(jp);
+				mainFramePanel.add(searchMe);
+				mainFramePanel.add(productTypeSearch);
+				mainFramePanel.add(choiceSearch);
+				searchMe.setBounds(200, 30, 350, 60);
+				// mainFramePanel.add(moveMainPageBtn);
+				mainFramePanel.add(addDel1);
+				mainFramePanel.add(stockManageBtn);
+				mainFramePanel.updateUI();
+					
+					
+					*/
+				
+			}
 			if (e.getSource() == userbackHomeBtn) {
 				mainFramePanel.removeAll();
 				mainFramePanel.add(moveMainPageBtn);
@@ -590,6 +699,12 @@ class MainFrame extends JFrame {
 				mainFramePanel.updateUI();
 			} // 초기화면으로 넘어감?
 		}
+	}
+}
+
+class userProduct extends MainFrame {
+	public static void userProductp() throws SQLException {
+		
 	}
 }
 
