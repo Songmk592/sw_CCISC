@@ -27,13 +27,11 @@ class MainFrame extends JFrame {
 	private JPanel salesAllLabelPanel = new JPanel();// 매출현황을 표시할 6개의 라벨을 담을 라벨
 	private JPanel salesAllBtnPanel = new JPanel();// 전체매출을 검색할 버튼을 담을 패널
 	private JPanel mainFramePanel = new JPanel();// 모든화면 적재하는 패널
-	
-	
-	
+
 	////////////////////////////////
 	private JPanel userPanel = new JPanel();
 	private JPanel userSearchPanel = new JPanel();
-	private JPanel userHotItemPanel=new JPanel();//표시할 6개의 라벨을 담을 라벨
+	private JPanel userHotItemPanel = new JPanel();// 표시할 6개의 라벨을 담을 라벨
 	private JButton userProductTypeSearch;
 	private JButton userProductSearch;
 	private JButton userHotItemSearch;
@@ -42,15 +40,10 @@ class MainFrame extends JFrame {
 	private JLabel userHotItem3 = new JLabel("           ★ 이 주의 Hot Item");
 	protected static JLabel userHotItem4 = new JLabel("?");
 	private JLabel userHotItem5 = new JLabel("           ★ 이 달의 Hot Item");
-	protected static JLabel userHotItem6 = new JLabel("?");//표시 할 라벨들
-	
-	
-	
+	protected static JLabel userHotItem6 = new JLabel("?");// 표시 할 라벨들111
+
 	////////////////////////////
-	
-	private JButton moveUserPageBtn;//
-	
-	
+
 	ImageIcon productIcon = new ImageIcon("src/img/product1.png");// 상품관리버튼의 이미지
 	ImageIcon productIcon2 = new ImageIcon("src/img/product2.png");// 상품관리버튼의
 																	// 이미지
@@ -61,6 +54,7 @@ class MainFrame extends JFrame {
 	ImageIcon login = new ImageIcon("src/img/login.png");
 	ImageIcon userAccount = new ImageIcon("src/img/userAccount.png");
 	ImageIcon logout1 = new ImageIcon("src/img/logout1.png");
+	private JButton moveUserPageBtn;
 	private JButton moveMainPageBtn;// 메인페이지으로 넘어가는 버튼
 	private JButton moveMainAccountBtn;
 	private JButton moveMainPageBtn2;// 로그인화면이 아닌곳에서 메인페이지로 넘어가는 버튼
@@ -160,19 +154,17 @@ class MainFrame extends JFrame {
 																						// 적재
 	ConnectDatabase c1 = new ConnectDatabase();// DB객체 생성
 	JDialog dia = new JDialog(this, "로그인오류", false);// 로그인 오류 다이아로그
-	JLabel diaLa = new JLabel();
+	static JLabel diaLa = new JLabel();
+	// static JDialog diaa = new JDialog(this, "상품명오류", false);
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
-
-	// searchProductType sPT = new searchProductType();
-	// searchProductName sPN = new searchProductName();
-	// searchSaleName sSN = new searchSaleName();
-	// searchSaleType sST = new searchSaleType();
-	// searchSaleAll sSA = new searchSaleAll();
 
 	public MainFrame() {
 		this.setSize(1000, 550);// 프로그램 화면 크기
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("CCISC");
+		moveUserPageBtn = new JButton("Back");
+		moveUserPageBtn.setBounds(770, 400, 100, 30);
+		moveUserPageBtn.addActionListener(new myListener());
 		moveMainPageBtn = new JButton(login);// 로그인 화면에서 기능선택 화면으로 넘어가는 버튼
 		moveMainPageBtn.setBounds(450, 330, 130, 35);// 버튼 크기, 위치 지정
 		moveMainAccountBtn = new JButton(userAccount);// 로그인 화면에서 기능선택 화면으로 넘어가는
@@ -203,25 +195,18 @@ class MainFrame extends JFrame {
 		typeSearchSales = new JButton("조회");
 		allSearchSales = new JButton("조회");
 		///////////////////////
-		userHotItemSearch=new JButton("조회");
-		userProductSearch=new JButton("상품 조회");
-		//userHotItemSearch.setBounds(30, 40, 100, 30);
+		userHotItemSearch = new JButton("조회");
+		userProductSearch = new JButton("상품 조회");
+		// userHotItemSearch.setBounds(30, 40, 100, 30);
 		userHotItemSearch.addActionListener(new myListener());
 		userProductSearch.addActionListener(new myListener());
-	
+
 		userSearchPanel.setLayout(new GridLayout(1, 4, 5, 5));// 1행4열의 그리드
 		userSearchPanel.add(userHotItemSearch);
 		userSearchPanel.add(userProductSearch);
 		userSearchPanel.add(salesEmptyLabel3);
 		userSearchPanel.add(userbackHomeBtn);
 		///////////////////////
-		
-		
-		
-//////////
-	moveUserPageBtn = new JButton("Back");
-	moveUserPageBtn.setBounds(770, 400, 100, 30);
-	moveUserPageBtn.addActionListener(new myListener());
 		addDel1 = new JButton("상품추가/삭제");// 상품추가/삭제 버튼
 		addDel1.setBounds(170, 400, 120, 30);
 		stockManageBtn = new JButton("재고관리");
@@ -305,8 +290,6 @@ class MainFrame extends JFrame {
 		c.weighty = 3.0;
 		c.fill = GridBagConstraints.HORIZONTAL;// 남은공간을 수평방향으로 채운다.
 		searchMe.add(searchScopeTextField, c);
-		
-		
 		salesSearchPanel.setLayout(new GridLayout(1, 4, 5, 5));// 1행4열의 그리드
 																// 레이아웃/* 여기서부터
 		salesSearchPanel.add(salesSearchScopeLabel);
@@ -353,7 +336,7 @@ class MainFrame extends JFrame {
 		salesAllScreenPanel.add(salesAllBtnPanel, BorderLayout.NORTH);
 		salesAllScreenPanel.add(salesAllLabelPanel, BorderLayout.CENTER);
 		salesTab1.addTab("전체매출조회", salesAllScreenPanel);// 여기까지 매출조회화면 컴포넌트
-														// 삽입코드*/
+		// 삽입코드*/
 		mainFramePanel.setLayout(null);// 레이아웃배치는 자유
 		mainFramePanel.add(moveMainPageBtn);
 		mainFramePanel.add(moveMainAccountBtn);
@@ -378,6 +361,7 @@ class MainFrame extends JFrame {
 		dia.setLocation(470, 250);// 위치
 		dia.add(diaLa);// 라벨 삽입
 		dia.add(diaBtn);// 버튼
+		// model2.setNumRows(0);
 		diaBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dia.setVisible(false);
@@ -405,16 +389,15 @@ class MainFrame extends JFrame {
 					flag2 = 1;
 
 					if (compare >= 0 && compare <= 99999999 && id.length() == 8) {
-						
+
 						mainFramePanel.removeAll();
 						chan.setBounds(0, 0, 1000, 550);
 						chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
-						
-						
+
 						userHotItem2.setText("?");
 						userHotItem4.setText("?");
 						userHotItem6.setText("?");
-						userHotItemPanel.setLayout(new GridLayout(3,2,5,5));
+						userHotItemPanel.setLayout(new GridLayout(3, 2, 5, 5));
 						userHotItem1.setFont(f1);
 						userHotItem2.setFont(f1);
 						userHotItem3.setFont(f1);
@@ -429,12 +412,11 @@ class MainFrame extends JFrame {
 						userHotItemPanel.add(userHotItem6);
 						mainFramePanel.setLayout(new BorderLayout());
 						mainFramePanel.add(userSearchPanel, BorderLayout.AFTER_LAST_LINE);
-						
+
 						mainFramePanel.add(userHotItemPanel, BorderLayout.CENTER);
-						
-					
+
 						mainFramePanel.updateUI();
-						//UserFrame uf = new UserFrame();
+						// UserFrame uf = new UserFrame();
 					} else {
 
 						mainFramePanel.removeAll();
@@ -446,7 +428,13 @@ class MainFrame extends JFrame {
 						mainFramePanel.add(salesManageBtn);
 						mainFramePanel.add(manageBtn);
 						mainFramePanel.add(pageback);
-						mainFramePanel.setLayout(null);/////////////////이걸 넣어야 사용자로 로그인했다가 관리자로 로그인할때 오류안남 ㅠㅠㅠ
+						mainFramePanel.setLayout(null);///////////////// 이걸 넣어야
+														///////////////// 사용자로
+														///////////////// 로그인했다가
+														///////////////// 관리자로
+														///////////////// 로그인할때
+														///////////////// 오류안남
+														///////////////// ㅠㅠㅠ
 						mainFramePanel.updateUI();// 화면업데이트
 
 					}
@@ -466,6 +454,8 @@ class MainFrame extends JFrame {
 	}// 로그인 구현 메소드
 
 	class myListener implements ActionListener {
+		Connection con = ConnectDatabase.makeConnection();
+
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == moveMainPageBtn) {
 				try {
@@ -479,7 +469,6 @@ class MainFrame extends JFrame {
 			} // 로그인 화면에서 기능선택화면으로 넘어감
 			if (e.getSource() == moveMainAccountBtn) {
 				UserAccountFrame f4u = new UserAccountFrame();
-
 			} // 로그인 화면에서 계정추가,삭제화면으로 넘어감
 			if (e.getSource() == moveMainPageBtn2) {
 
@@ -492,11 +481,8 @@ class MainFrame extends JFrame {
 				mainFramePanel.add(salesManageBtn);
 				mainFramePanel.add(manageBtn);
 				mainFramePanel.add(pageback);
-				 model = new DefaultTableModel(content, head); // 여기부터
-				 ta1 = new JTable(model);
-				 jp = new JScrollPane(ta1);
-				 jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL 값으로 초기화
 				mainFramePanel.updateUI();// 화면업데이트
+
 			} // 로그인 화면이 아닌곳에서 기능선택 페이지로 넘어감
 			if (e.getSource() == backHomeBtn) {
 				mainFramePanel.removeAll();
@@ -511,6 +497,11 @@ class MainFrame extends JFrame {
 			} // 초기화면으로 넘어감?
 			if (e.getSource() == productManageBtn) {
 				mainFramePanel.removeAll();
+				model = new DefaultTableModel(content, head); // 여기부터
+				ta1 = new JTable(model);
+				jp = new JScrollPane(ta1);
+				jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL
+													// 값으로 초기화
 				mainFramePanel.add(moveMainPageBtn2);
 				mainFramePanel.add(jp);
 				mainFramePanel.add(searchMe);
@@ -526,7 +517,6 @@ class MainFrame extends JFrame {
 				mainFramePanel.removeAll();
 				mainFramePanel.add(moveMainPageBtn2);
 				mainFramePanel.add(salesTab1);
-				
 				mainFramePanel.updateUI();
 			} // 매출관리화면으로 넘어감
 			if (e.getSource() == manageBtn) {
@@ -550,8 +540,86 @@ class MainFrame extends JFrame {
 			} // 상품품목별조회
 			if (e.getSource() == choiceSearch) {
 				int index1 = searchScopeCbox.getSelectedIndex();
+				ResultSet rs = null;
+				String str, compareStr;
+				int count = 0;
+				JOptionPane temp = new JOptionPane();
 				try {
-					searchProductName.searchProductNamep(index1, searchScopeTextField.getText());
+					Statement stmt = con.createStatement();
+					if (index1 == 0)
+						temp.showMessageDialog(null, "조회할 수 없습니다.");
+					else if (index1 == 1) {
+						String sql = "select productname from producttable";
+						rs = stmt.executeQuery(sql);
+						str = searchScopeTextField.getText();// +" ";
+						while (rs.next()) {
+							compareStr = rs.getString("productname");
+							compareStr = compareStr.trim();
+							if (str.equals(compareStr))
+								count++;
+							else
+								count = 0;
+						}
+						if (count == 0 || searchScopeTextField.equals("")) {
+							mainFramePanel.removeAll();
+							model = new DefaultTableModel(content, head); // 여기부터
+							ta1 = new JTable(model);
+							jp = new JScrollPane(ta1);
+							jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때
+																// pannel NULL
+																// 값으로 초기화
+							mainFramePanel.add(moveMainPageBtn2);
+							mainFramePanel.add(jp);
+							mainFramePanel.add(searchMe);
+							mainFramePanel.add(productTypeSearch);
+							mainFramePanel.add(choiceSearch);
+							searchMe.setBounds(200, 30, 350, 60);
+							mainFramePanel.add(moveMainPageBtn);
+							mainFramePanel.add(addDel1);
+							mainFramePanel.add(stockManageBtn);
+							mainFramePanel.updateUI();
+							temp.showMessageDialog(null, "상품의 정보가 없습니다.");
+						} else
+							searchProductName.searchProductNamep(index1, searchScopeTextField.getText());
+
+					}
+
+					else if (index1 == 2) {
+						String sql = "select productnum from producttable";
+						rs = stmt.executeQuery(sql);
+						int cnt = 0;
+
+						String cNum = searchScopeTextField.getText();
+						while (rs.next()) {
+
+							String pNum = rs.getString("productnum");
+							if (pNum.equals(cNum)) {
+								cnt = 0;
+							} else
+								cnt++;
+						}
+						if (cnt == 0) {
+							searchProductName.searchProductNamep(index1, searchScopeTextField.getText());
+						} else {
+							mainFramePanel.removeAll();
+							model = new DefaultTableModel(content, head); // 여기부터
+							ta1 = new JTable(model);
+							jp = new JScrollPane(ta1);
+							jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때
+																// pannel NULL
+																// 값으로 초기화
+							mainFramePanel.add(moveMainPageBtn2);
+							mainFramePanel.add(jp);
+							mainFramePanel.add(searchMe);
+							mainFramePanel.add(productTypeSearch);
+							mainFramePanel.add(choiceSearch);
+							searchMe.setBounds(200, 30, 350, 60);
+							mainFramePanel.add(addDel1);
+							mainFramePanel.add(stockManageBtn);
+							mainFramePanel.updateUI();
+							temp.showMessageDialog(null, "상품이 없습니다.");
+						}
+					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -560,20 +628,90 @@ class MainFrame extends JFrame {
 			if (e.getSource() == productSearchSales) {
 				int index2 = salesSearchScopeCbox.getSelectedIndex();
 				try {
-					searchSaleName.searchSaleNamep(index2, salesSearchScopeTextField.getText());
+					JOptionPane temp = new JOptionPane();
+					if (index2 == 0) {
+						if (!salesSearchScopeTextField.getText().equals("")) {
+							temp.showMessageDialog(null, "값을 입력하시면 안됩니다.");
+						} else
+							searchSaleName.searchSaleNamep(index2, salesSearchScopeTextField.getText());
+					} else if (index2 == 1) {
+						Statement stmt = con.createStatement();
+						String sql = "select productname from producttable";
+						ResultSet rs = stmt.executeQuery(sql);
+						String productName, cproductName;
+						int cnt = 0;
+
+						cproductName = salesSearchScopeTextField.getText();
+						cproductName.trim();
+
+						while (rs.next()) {
+							productName = rs.getString("productname");
+							productName = productName.trim();
+							if (productName.equals(cproductName))
+								cnt++;
+						}
+						if (salesSearchScopeTextField.getText().equals(""))
+							temp.showMessageDialog(null, "상품명을 입력하세요.");
+						else if (cnt == 0) {
+							temp.showMessageDialog(null, "상품이 없습니다.");
+						} else {
+							searchSaleName.searchSaleNamep(index2, salesSearchScopeTextField.getText());
+						}
+					} else if (index2 == 2) {
+						Statement stmt = con.createStatement();
+						String sql = "select productnum from producttable";
+						ResultSet rs = stmt.executeQuery(sql);
+						String num, cnum;
+						int count = 0;
+						cnum = salesSearchScopeTextField.getText();
+
+						while (rs.next()) {
+							num = rs.getString("productnum");
+							if (num.equals(cnum))
+								count = 0;
+							else
+
+								count++;
+						}
+						if (salesSearchScopeTextField.getText().equals(""))
+							temp.showMessageDialog(null, "상품번호를 입력하세요.");
+						else if (count == 0) {
+							searchSaleName.searchSaleNamep(index2, salesSearchScopeTextField.getText());
+						} else
+							temp.showMessageDialog(null, "상품이 없습니다.");
+					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+
 			} // 상품별 매출 조회
 			if (e.getSource() == typeSearchSales) {
 				try {
-					searchSaleType.searchSaleTypep();
+					String productType = null;
+					Statement stmt = con.createStatement();
+					String sql = "select producttype from producttable";
+					ResultSet rs = stmt.executeQuery(sql);
+					JOptionPane temp = new JOptionPane();
+					int count = 0;
+					while (rs.next()) {
+						productType = rs.getString(1);
+						if (productType.equals(null))
+							count = 0;
+						else
+							count++;
+					}
+					if (count == 0)
+						temp.showMessageDialog(null, "품목이 없습니다.");
+					else
+						searchSaleType.searchSaleTypep();
+					System.out.println("1111");
+
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
+			} // 매출란 품목별조회
 			if (e.getSource() == allSearchSales) {
 				try {
 					searchSaleAll.searchSaleAllp();
@@ -588,15 +726,16 @@ class MainFrame extends JFrame {
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				
+
 				}
 			}
+
 			if (e.getSource() == moveUserPageBtn) {
-				
+
 				mainFramePanel.removeAll();
 				chan.setBounds(0, 0, 1000, 550);
 				chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
-				userHotItemPanel.setLayout(new GridLayout(3,2,5,5));
+				userHotItemPanel.setLayout(new GridLayout(3, 2, 5, 5));
 				userHotItem1.setFont(f1);
 				userHotItem2.setFont(f1);
 				userHotItem3.setFont(f1);
@@ -609,84 +748,37 @@ class MainFrame extends JFrame {
 				userHotItemPanel.add(userHotItem4);
 				userHotItemPanel.add(userHotItem5);
 				userHotItemPanel.add(userHotItem6);
-				
-				
-				 model = new DefaultTableModel(content, head); // 여기부터
-				 ta1 = new JTable(model);
-				 jp = new JScrollPane(ta1);
-				 jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL 값으로 초기화
-				
-				
+
+				model = new DefaultTableModel(content, head); // 여기부터
+				ta1 = new JTable(model);
+				jp = new JScrollPane(ta1);
+				jp.setBounds(180, 120, 600, 250); // 여기까지 새로 창 띄었을때 pannel NULL
+													// 값으로 초기화
+
 				mainFramePanel.setLayout(new BorderLayout());
 				mainFramePanel.add(userSearchPanel, BorderLayout.AFTER_LAST_LINE);
-				
+
 				mainFramePanel.add(userHotItemPanel, BorderLayout.CENTER);
-				
-			
+
 				mainFramePanel.updateUI();
 			}
 			if (e.getSource() == userProductSearch) {
 				/////////////////////////////////////////////////////////////////////////////////////////////////////
-				
-				 mainFramePanel.removeAll();
-				 chan.setBounds(0, 0, 1000, 550);
-					chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
-					//userHotItem2.setText("?"); // 상품조회후 다시 돌아왔을때 물음표가 떠야하나? 같이 물어보고 고치기
-					//userHotItem4.setText("?");
-					//userHotItem6.setText("?");
-					mainFramePanel.add(moveUserPageBtn);
-					mainFramePanel.add(jp);
-					mainFramePanel.add(searchMe);
-					mainFramePanel.add(productTypeSearch);
-					mainFramePanel.add(choiceSearch);
-					searchMe.setBounds(200, 30, 350, 60);
-			
-					
-					mainFramePanel.setLayout(null); /////////////////이걸 넣어야 오류안남 ㅠㅠㅠ 왜?ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ
-					mainFramePanel.updateUI();
-						
-				
-				
-				/*
-				userJp.setBounds(180, 120, 600, 250);
-					mainFramePanel.removeAll();
-					chan.setBounds(0, 0, 1000, 550);
-					chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
-					
-					
-					
-					
-					userProductPanel.add(moveMainPageBtn2);
-					userProductPanel.add(userJp);
-					userProductPanel.add(userSearch);
-					userProductPanel.add(productTypeSearch);
-					userProductPanel.add(choiceSearch);
-					userSearch.setBounds(200, 30, 350, 60);
-					// userProductPanel.add(moveMainPageBtn);
-					// userProductPanel.add(addDel1);
-					//userProductPanel.add(stockManageBtn);
-					mainFramePanel.setLayout(new BorderLayout());
-					mainFramePanel.add(userProductPanel);
-					mainFramePanel.updateUI();
-					//userHotItem.userHotItemp();
-					/*
-					 
-					 mainFramePanel.removeAll();
-				mainFramePanel.add(moveMainPageBtn2);
+
+				mainFramePanel.removeAll();
+				chan.setBounds(0, 0, 1000, 550);
+				chan.setOpaque(false);// 이렇게 해놔야 컴포넌트들이 보임
+				mainFramePanel.add(moveUserPageBtn);
 				mainFramePanel.add(jp);
 				mainFramePanel.add(searchMe);
 				mainFramePanel.add(productTypeSearch);
 				mainFramePanel.add(choiceSearch);
 				searchMe.setBounds(200, 30, 350, 60);
-				// mainFramePanel.add(moveMainPageBtn);
-				mainFramePanel.add(addDel1);
-				mainFramePanel.add(stockManageBtn);
+				mainFramePanel.setLayout(null);
 				mainFramePanel.updateUI();
-					
-					
-					*/
-				
+
 			}
+
 			if (e.getSource() == userbackHomeBtn) {
 				mainFramePanel.removeAll();
 				mainFramePanel.add(moveMainPageBtn);
@@ -702,44 +794,35 @@ class MainFrame extends JFrame {
 	}
 }
 
-class userProduct extends MainFrame {
-	public static void userProductp() throws SQLException {
-		
-	}
-}
-
 class userHotItem extends MainFrame {
 	public static void userHotItemp() throws SQLException {
 		Connection con = ConnectDatabase.makeConnection();
-	      Statement stmt = con.createStatement();
-	      String arr[]=new String[3];
-	      
-	      ResultSet rs = stmt.executeQuery("select p.PRODUCTNAME as dayproductname"
-	            +" from salesstocktable s,producttable p"
-	            +" where s.PRODUCTNUM=p.PRODUCTNUM "
-	            + "and s.DAYSALES = (select max(DAYSALES) from salesstocktable)");
-	      while (rs.next()) {
-	         arr[0]=rs.getString("DAYPRODUCTNAME");
-	      }
-	      
-	      rs = stmt.executeQuery("select p.PRODUCTNAME as weekproductname"
-		            +" from salesstocktable s,producttable p"
-		            +" where s.PRODUCTNUM=p.PRODUCTNUM "
-		            + "and s.WEEKSALES = (select max(WEEKSALES) from salesstocktable)");
-		  while (rs.next()) {
-			  arr[1]=rs.getString("WEEKPRODUCTNAME");
-		  }
-		      
-		  rs = stmt.executeQuery("select p.PRODUCTNAME as monthproductname"
-			        +" from salesstocktable s,producttable p"
-			        +" where s.PRODUCTNUM=p.PRODUCTNUM "
-			        + "and s.MONTHSALES = (select max(MONTHSALES) from salesstocktable)");
-		  while (rs.next()) {
-			  arr[2]=rs.getString("MONTHPRODUCTNAME");
-		  }
-	      userHotItem2.setText(arr[0]);
-	      userHotItem4.setText(arr[1]);
-	      userHotItem6.setText(arr[2]);
+		Statement stmt = con.createStatement();
+		String arr[] = new String[3];
+
+		ResultSet rs = stmt.executeQuery("select p.PRODUCTNAME as dayproductname"
+				+ " from salesstocktable s,producttable p" + " where s.PRODUCTNUM=p.PRODUCTNUM "
+				+ "and s.DAYSALES = (select max(DAYSALES) from salesstocktable)");
+		while (rs.next()) {
+			arr[0] = rs.getString("DAYPRODUCTNAME");
+		}
+
+		rs = stmt.executeQuery("select p.PRODUCTNAME as weekproductname" + " from salesstocktable s,producttable p"
+				+ " where s.PRODUCTNUM=p.PRODUCTNUM "
+				+ "and s.WEEKSALES = (select max(WEEKSALES) from salesstocktable)");
+		while (rs.next()) {
+			arr[1] = rs.getString("WEEKPRODUCTNAME");
+		}
+
+		rs = stmt.executeQuery("select p.PRODUCTNAME as monthproductname" + " from salesstocktable s,producttable p"
+				+ " where s.PRODUCTNUM=p.PRODUCTNUM "
+				+ "and s.MONTHSALES = (select max(MONTHSALES) from salesstocktable)");
+		while (rs.next()) {
+			arr[2] = rs.getString("MONTHPRODUCTNAME");
+		}
+		userHotItem2.setText(arr[0]);
+		userHotItem4.setText(arr[1]);
+		userHotItem6.setText(arr[2]);
 	}
 }
 
@@ -747,10 +830,9 @@ class ConnectDatabase {
 	public static Connection makeConnection() {
 		String url = "jdbc:oracle:thin:@localhost:1521:XE";// SID 적을것
 		String id = "my_test_id";// sqldeveloper에서 만든 유저 ID
-		String password = "my_test_pw";// 비밀번호
+		String password = "dlsry4";// 비밀번호
 		Connection con = null;
 		try {
-			// Class.forName("com.mysql.jdbc.Driver");
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("드라이버 적재 성공");
 			con = DriverManager.getConnection(url, id, password);
@@ -863,14 +945,11 @@ class searchProductType extends MainFrame {
 			Connection con = ConnectDatabase.makeConnection();
 
 			Statement stmt = con.createStatement();
-			//ResultSet rset = null;
-			//PreparedStatement query = con.prepareStatement
 			ResultSet rset = stmt.executeQuery(
 					"select p.productnum, p.PRODUCTNAME, p.SALESPRICE, p.PRODUCTTYPE, m.MANUFACTURERNAME, s.stock"
 							+ " from producttable p, manufacturertable m, salesstocktable s"
-							+ " where p.PRODUCTNUM=s.productnum(+) and m.MANUFACTURERNUM(+)=p.MANUNUM and productType= '"+ in +"' ");
-			//query.setString(1, in);
-			//rset = query.executeQuery();
+							+ " where p.PRODUCTNUM=s.productnum(+) and m.MANUFACTURERNUM(+)=p.MANUNUM and productType= '"
+							+ in + "' ");
 
 			String arr[] = new String[6];
 			while (rset.next()) {

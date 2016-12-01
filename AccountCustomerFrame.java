@@ -4,27 +4,31 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 //拌沥包府, 芭贰贸包府 急琶拳搁
-public class AccountCustomerFrame extends JFrame{
-	private JButton accountManage=new JButton("拌沥包府");
-	private JButton customerManage=new JButton("芭贰贸包府");
-	public AccountCustomerFrame(){
-		setSize(245,100);
+public class AccountCustomerFrame extends JFrame {
+	private JButton accountManage = new JButton("拌沥包府");
+	private JButton customerManage = new JButton("芭贰贸包府");
+
+	public AccountCustomerFrame() {
+		setSize(245, 100);
 		setLayout(null);
-		accountManage.setBounds(10,10,100,30);
-		customerManage.setBounds(120,10,100,30);
+		accountManage.setBounds(10, 10, 100, 30);
+		customerManage.setBounds(120, 10, 100, 30);
 		add(accountManage);
 		add(customerManage);
 		accountManage.addActionListener(new myListener());
 		customerManage.addActionListener(new myListener());
 		this.setVisible(true);
 	}
-	class myListener implements ActionListener{
-		public void actionPerformed(ActionEvent e){
-			if(e.getSource() == accountManage){
-				AccountFrame fr4a=new AccountFrame();
+
+	class myListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == accountManage) {
+				AccountFrame fr4a = new AccountFrame();
+				dispose();
 			}
-			if(e.getSource() == customerManage){
-				CustomerSearchFrame fr4b=new CustomerSearchFrame();
+			if (e.getSource() == customerManage) {
+				CustomerSearchFrame fr4b = new CustomerSearchFrame();
+				dispose();
 			}
 		}
 	}
