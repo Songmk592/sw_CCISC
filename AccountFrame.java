@@ -9,7 +9,7 @@ import java.sql.Statement;
 import javax.swing.*;
 
 //계정추가, 삭제하는 프레임
-public class AccountFrame extends JFrame {
+public class AccountFrame extends ConnectDatabase {
 	private JLabel getID = new JLabel("ID");
 	private JLabel getPW = new JLabel("비밀번호");
 	private JLabel checkPW = new JLabel("비밀번호 확인");
@@ -32,10 +32,11 @@ public class AccountFrame extends JFrame {
 	JDialog dia = new JDialog(this, "계정관리", false);// 다이아로그
 	JLabel diaLa = new JLabel("생성되었습니다.");
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
-
-	ConnectDatabase c1 = new ConnectDatabase();// DB객체 생성
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
 	public AccountFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(300, 200);
 		pa2.setLayout(new FlowLayout());
 		pa4.setLayout(new FlowLayout());
@@ -74,7 +75,6 @@ public class AccountFrame extends JFrame {
 		diaBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dia.setVisible(false);
-				// dispose();
 			}
 		});// 다이어로그버튼을 위한 익명내부클래스
 	}
@@ -84,20 +84,20 @@ public class AccountFrame extends JFrame {
 			if (e.getSource() == createAccount) {
 				try {
 					createAccount ca = new createAccount(getIDTF.getText(), getPWTF.getText(), checkPWTF.getText());
+					dispose();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				dispose();
 			}
 			if (e.getSource() == deleteAccount) {
 				try {
 					deleteAccount da = new deleteAccount(getIDTF2.getText(), getPWTF2.getText(), checkPWTF2.getText());
+					dispose();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				dispose();
 			}
 		}
 	}
@@ -126,10 +126,13 @@ class UserAccountFrame extends JFrame { // extends AccountFrame {
 	JDialog dia = new JDialog(this, "계정관리", false);// 다이아로그
 	JLabel diaLa = new JLabel("생성되었습니다.");
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
-	ConnectDatabase c1 = new ConnectDatabase();// DB객체 생성
-
+		
+	
 	public UserAccountFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(300, 200);
 		pa2.setLayout(new FlowLayout());
 		pa4.setLayout(new FlowLayout());
@@ -177,7 +180,7 @@ class UserAccountFrame extends JFrame { // extends AccountFrame {
 				try {
 					if (confirmID(getIDTF.getText())) {
 						Account ca = new createAccount(getIDTF.getText(), getPWTF.getText(), checkPWTF.getText());
-
+						dispose();
 					} else {
 						diaLa.setText(" ID를 학번 8자리로 입력해주세요. ");
 						dia.setVisible(true);
@@ -193,13 +196,12 @@ class UserAccountFrame extends JFrame { // extends AccountFrame {
 					if (confirmID(getIDTF.getText())) {
 						deleteAccount da = new deleteAccount(getIDTF2.getText(), getPWTF2.getText(),
 								checkPWTF2.getText());
+						dispose();
 
 					} else {
 						diaLa.setText(" ID를 학번 8자리로 입력해주세요. ");
 						dia.setVisible(true);
-
 					}
-
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -219,7 +221,6 @@ class UserAccountFrame extends JFrame { // extends AccountFrame {
 }
 
 class Account extends AccountFrame {
-	protected Connection con = ConnectDatabase.makeConnection();
 	protected ResultSet rs = null;
 	protected ResultSet rs2 = null;
 }
@@ -227,7 +228,6 @@ class Account extends AccountFrame {
 class createAccount extends Account {
 
 	createAccount(String a, String b, String c) throws SQLException {
-		Statement stmt = con.createStatement();
 		String sql2 = "select accid from logininfo";
 		String sql = "INSERT INTO LOGININFO VALUES('" + a + "','" + b + "')";
 
@@ -244,6 +244,7 @@ class createAccount extends Account {
 		}
 
 		if (b.equals(c)) {
+			dispose();
 			rs = stmt.executeQuery(sql);
 			diaLa.setText("    생성되었습니다.    ");
 			dia.setVisible(true);
@@ -251,6 +252,7 @@ class createAccount extends Account {
 		} else {
 			diaLa.setText("비밀번호가 맞지 않습니다.");
 			dia.setVisible(true);
+
 		}
 
 	}
@@ -260,7 +262,6 @@ class createAccount extends Account {
 class deleteAccount extends Account {
 
 	deleteAccount(String a, String b, String c) throws SQLException {
-		Statement stmt = con.createStatement();
 		String id = null;
 		String pw = null;
 		String sql = "select * from logininfo where accid='" + a + "'";
@@ -272,6 +273,7 @@ class deleteAccount extends Account {
 		}
 		if (a.equals(id) && b.equals(pw) && b.equals(c)) {
 			rs = stmt.executeQuery(sql2);
+			dispose();
 			diaLa.setText("    삭제되었습니다.    ");
 			dia.setVisible(true);
 		} else if (!a.equals(id)) {

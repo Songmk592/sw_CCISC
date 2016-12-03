@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.sql.*;
 
 //거래처 추가, 삭제 화면
-public class CustomerFrame extends JFrame {
+public class CustomerFrame extends ConnectDatabase {
 	private JLabel customerName = new JLabel("이름");// 추가탭에 들어갈 라벨
 	private JLabel customerPhone = new JLabel("전화번호");
 	private JLabel customerCompanyNum = new JLabel("거래회사(번호)");
@@ -31,8 +31,13 @@ public class CustomerFrame extends JFrame {
 	JDialog dia = new JDialog(this, "거래처관리", false);// 다이아로그
 	JLabel diaLa = new JLabel("추가되었습니다.");
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
+		
+	
 	public CustomerFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(300, 210);
 		pa1.setLayout(new GridLayout(4, 2, 5, 5));
 		pa2.setLayout(new FlowLayout());
@@ -76,16 +81,14 @@ public class CustomerFrame extends JFrame {
 
 	class myListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Connection con = ConnectDatabase.makeConnection();
 			if (e.getSource() == customerAdd) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select MANUFACTURERNAME from MANUFACTURERTABLE";
 					JOptionPane temp = new JOptionPane();
-					
+
 					int cCheck3 = Integer.parseInt(customerCompanyNumTF.getText());
 					ResultSet rs = stmt.executeQuery(sql);
-					int cnt=0;
+					int cnt = 0;
 
 					while (rs.next()) {
 						String personName = rs.getString("MANUFACTURERNAME");
@@ -104,11 +107,12 @@ public class CustomerFrame extends JFrame {
 					}
 
 					else {
-							customerAddr.customerAdd(customerNameTF.getText(), customerPhoneTF.getText(),
-									customerCompanyNumTF.getText(), customerCompanyTF.getText());
-							diaLa.setText("추가되었습니다.");
-							dia.setVisible(true);
-						
+						dispose();
+						customerAddr.customerAdd(customerNameTF.getText(), customerPhoneTF.getText(),
+								customerCompanyNumTF.getText(), customerCompanyTF.getText());
+						diaLa.setText("추가되었습니다.");
+						dia.setVisible(true);
+
 					}
 
 				} catch (SQLException e1) {
@@ -119,25 +123,23 @@ public class CustomerFrame extends JFrame {
 			}
 			if (e.getSource() == customerDel) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select PERSONINCHARGER from MANUFACTURERTABLE";
 					ResultSet rs = stmt.executeQuery(sql);
 					JOptionPane temp2 = new JOptionPane();
-					
+
 					String name, cname;
 					int error = 0;
-					//cname = customerNameTF2.getText();
-					//cname.trim();
 					while (rs.next()) {
-						
+
 						name = rs.getString("PERSONINCHARGER");
 						name = name.trim();
-						if (name.equals( customerNameTF2.getText()))
+						if (name.equals(customerNameTF2.getText()))
 							error++;
 					}
 					if (error == 0) {
 						temp2.showMessageDialog(null, "존재하지 않는 거래처입니다.");
 					} else {
+						dispose();
 						customerDelr.customerDel(customerNameTF2.getText());
 						diaLa.setText("삭제되었습니다.");
 						dia.setVisible(true);
@@ -151,25 +153,20 @@ public class CustomerFrame extends JFrame {
 		}
 	}
 }
+
 class Customer extends CustomerFrame {
-	protected static Connection con;
-	protected static Statement stmt;
 	protected static ResultSet rs;
 }
 
 class customerAddr extends Customer {
 	public static void customerAdd(String a, String b, String c, String d) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
 		rs = stmt.executeQuery(
 				"insert into MANUFACTURERTABLE values" + "('" + c + "','" + d + "','" + a + "','" + b + "')");
 	}
 }
 
-class customerDelr extends Customer{
+class customerDelr extends Customer {
 	public static void customerDel(String a) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
 		rs = stmt.executeQuery("delete from MANUFACTURERTABLE where PERSONINCHARGER='" + a + "'");
 	}
 }

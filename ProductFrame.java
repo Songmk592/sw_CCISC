@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 /*상품 추가/제거 프레임*/
-public class ProductFrame extends JFrame {
+public class ProductFrame extends ConnectDatabase {
 	JPanel adPa1 = new JPanel();// 상품추가할때 텍스트필드,라벨들어갈곳
 	JPanel adPa2 = new JPanel();// adPa1에 버튼추가후 탭패널에 넣을거
 	JPanel adPa3 = new JPanel();// 상품제거할때 텍스트필드,라벨들어갈곳
@@ -42,8 +43,11 @@ public class ProductFrame extends JFrame {
 	JDialog dia = new JDialog(this, "추가", false);// 다이아로그
 	JLabel diaLa = new JLabel("추가되었습니다.");
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
 	public ProductFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(300, 300);
 		adPa1.setLayout(new GridLayout(6, 2, 5, 5));
 		adPa2.setLayout(new FlowLayout());
@@ -91,16 +95,12 @@ public class ProductFrame extends JFrame {
 	}
 
 	// 상품추가 버튼 구현
-
 	class myListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
-			Connection con = ConnectDatabase.makeConnection();
-
 			if (e.getSource() == adPaBtn1) {
 
 				try {
-					Statement stmt = con.createStatement();
+
 					String sql = "select productname, productnum from producttable";
 					ResultSet rs = stmt.executeQuery(sql);
 					JOptionPane temp = new JOptionPane();
@@ -114,7 +114,7 @@ public class ProductFrame extends JFrame {
 					int pCheck3 = Integer.parseInt(t3.getText());
 					int pCheck4 = Integer.parseInt(t4.getText());
 					int pCheck5 = Integer.parseInt(t5.getText());
-					
+
 					while (rs.next()) {
 
 						String pName = rs.getString("productname");
@@ -125,20 +125,18 @@ public class ProductFrame extends JFrame {
 							temp.showMessageDialog(null, "이미 존재하는 상품입니다.");
 							return;
 						}
-						
-						if(pNum.equals(t1.getText())) {
+
+						if (pNum.equals(t1.getText())) {
 							temp.showMessageDialog(null, "이미 존재하는 제품번호입니다.");
 							return;
 						}
-							
 
 					}
-					
-					
 
-					if (pCheck1 < 0  || pCheck3 < 0 || pCheck4 < 0 || pCheck5 < 0) {
+					if (pCheck1 < 0 || pCheck3 < 0 || pCheck4 < 0 || pCheck5 < 0) {
 						temp.showMessageDialog(null, "잘못된 값을 입력하셨습니다. 다시 입력하세요.");
 					} else {
+						dispose();
 						productAddr.productAdd(t1.getText(), t2.getText(), t3.getText(), t4.getText(), t5.getText(),
 								t6.getText());
 						diaLa.setText("추가되었습니다.");
@@ -149,11 +147,9 @@ public class ProductFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				// dispose();
 			}
 			if (e.getSource() == adPaBtn2) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select productnum from producttable";
 					ResultSet rs = stmt.executeQuery(sql);
 					int num, cnum, error = 0;
@@ -171,6 +167,7 @@ public class ProductFrame extends JFrame {
 						if (error == 0)
 							temp2.showMessageDialog(null, "이미 삭제된 제품이거나 존재하지 않습니다..");
 						else {
+							dispose();
 							productDelr.productDel(tt1.getText());
 							diaLa.setText("제거되었습니다.");
 							dia.setVisible(true);
@@ -181,48 +178,37 @@ public class ProductFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				// dispose();
 			}
 		}
 	}
 }
-class Product {
-	protected static Connection con = null;
-	protected static Statement stmt = null;
-	protected static String sql = null;
-	protected static String sql2 = null;
-	protected static ResultSet rs = null;
-	protected static ResultSet rs2 = null;
-	protected static ResultSet rs3 = null;
-	protected static ResultSet rs4 = null;
-	
+
+class Product extends ProductFrame {
+
 }
+
 class productAddr extends Product {
 	public static void productAdd(String a, String b, String c, String d, String e, String f) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
-		sql = "INSERT INTO producttable VALUES(" + a + ",'" + b + "'," + c + "," + d + "," + e + ",'" + f + "')";
-		sql2 = "INSERT INTO SALESSTOCKTABLE VALUES(" + a + ",0,0,0,0)";
-		rs = stmt.executeQuery(sql);
-		rs2 = stmt.executeQuery(sql2);
+		String sql = "INSERT INTO producttable VALUES(" + a + ",'" + b + "'," + c + "," + d + "," + e + ",'" + f + "')";
+		String sql2 = "INSERT INTO SALESSTOCKTABLE VALUES(" + a + ",0,0,0,0)";
+		ResultSet rs = stmt.executeQuery(sql);
+		ResultSet rs2 = stmt.executeQuery(sql2);
 	}
 }
 
 class productDelr extends Product {
 	public static void productDel(String a) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
-		sql = "delete from producttable where productnum=" + a;
-		sql2 = "delete from SALESSTOCKTABLE where productnum=" + a;
+		String sql = "delete from producttable where productnum=" + a;
+		String sql2 = "delete from SALESSTOCKTABLE where productnum=" + a;
 		String stockVal = null;
-		rs3 = stmt.executeQuery("select * FROM EXPIRATIONTABLE" + " WHERE productnum=" + a);
+		ResultSet rs3 = stmt.executeQuery("select * FROM EXPIRATIONTABLE" + " WHERE productnum=" + a);
 		while (rs3.next()) {
 			stockVal = rs3.getString("stock");
 		}
-		rs4 = stmt.executeQuery("DELETE FROM EXPIRATIONTABLE " + "WHERE productnum=" + a);
+		ResultSet rs4 = stmt.executeQuery("DELETE FROM EXPIRATIONTABLE " + "WHERE productnum=" + a);
 		// 수량값이 0이면 해당 유통기한행의 전체 재고수 추출후 stockVal에 저장. 그후 그 행 전체 삭제
 
-		rs = stmt.executeQuery(sql);
-		rs2 = stmt.executeQuery(sql2);
+		ResultSet rs = stmt.executeQuery(sql);
+		ResultSet rs2 = stmt.executeQuery(sql2);
 	}
 }

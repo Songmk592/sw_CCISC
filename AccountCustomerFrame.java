@@ -7,8 +7,11 @@ import javax.swing.*;
 public class AccountCustomerFrame extends JFrame {
 	private JButton accountManage = new JButton("拌沥包府");
 	private JButton customerManage = new JButton("芭贰贸包府");
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
 	public AccountCustomerFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(245, 100);
 		setLayout(null);
 		accountManage.setBounds(10, 10, 100, 30);

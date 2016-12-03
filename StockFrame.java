@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 //재고추가, 폐기 프레임
-public class StockFrame extends JFrame {
+public class StockFrame extends ConnectDatabase {
 	JPanel adPa1 = new JPanel();// 재고추가할때 텍스트필드,라벨들어갈곳
 	JPanel adPa2 = new JPanel();// adPa1에 버튼추가후 탭패널에 넣을거
 	JPanel adPa3 = new JPanel();// 재고폐기할때 텍스트필드,라벨들어갈곳
@@ -40,8 +41,11 @@ public class StockFrame extends JFrame {
 	JDialog dia = new JDialog(this, "추가", false);// 다이아로그
 	static JLabel diaLa = new JLabel("추가되었습니다.");
 	JButton diaBtn = new JButton("확인");// 다이어로그 라벨,버튼들
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
 	public StockFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(300, 200);
 		adPa1.setLayout(new GridLayout(3, 2, 5, 5));
 		adPa2.setLayout(new FlowLayout());
@@ -65,7 +69,7 @@ public class StockFrame extends JFrame {
 		adPa3.add(ta2);
 		adPa3.add(tt2);
 		adPa3.add(ta3);
-		tt3.setText("수량 0으로 입력시 전부 삭제");
+		tt3.setText("");
 		adPa3.add(tt3);
 		adPa4.add(adPa3);
 		adPaBtn2.setSize(100, 30);
@@ -90,11 +94,9 @@ public class StockFrame extends JFrame {
 
 	class myListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Connection con = ConnectDatabase.makeConnection();
 			String productNum = null;
 			if (e.getSource() == adPaBtn1) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select productnum from producttable";
 					ResultSet rs = stmt.executeQuery(sql);
 					JOptionPane temp = new JOptionPane();
@@ -116,6 +118,7 @@ public class StockFrame extends JFrame {
 					} else if (error == 0)
 						temp.showMessageDialog(null, "제품이 없습니다. 제품부터 추가하세요.");
 					else {
+						dispose();
 						stockAddr.stockAdd(t1.getText(), t2.getText(), t3.getText());
 						diaLa.setText("추가되었습니다.");
 						dia.setVisible(true);
@@ -130,7 +133,6 @@ public class StockFrame extends JFrame {
 			}
 			if (e.getSource() == adPaBtn2) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select STOCK,productnum from EXPIRATIONTABLE";
 					ResultSet rs = stmt.executeQuery(sql);
 					JOptionPane temp2 = new JOptionPane();
@@ -155,6 +157,7 @@ public class StockFrame extends JFrame {
 						}
 					}
 					if (count == 0) {
+						dispose();
 						String val = stockDelr.stockDel(tt1.getText(), tt2.getText(), tt3.getText());
 						stockDelr.stockDel2(tt1.getText(), val);
 						diaLa.setText("폐기되었습니다.");
@@ -171,22 +174,15 @@ public class StockFrame extends JFrame {
 	}
 }
 
-class Stock extends StockFrame{
-	protected static Connection con = null;
-	protected static Statement stmt = null;
-	protected static String sql = null;
-	protected static String sql2 = null;
-	protected static ResultSet rs = null;
-	protected static ResultSet rs2 = null;
+class Stock extends StockFrame {
+
 }
 
 class stockAddr extends Stock {
 	public static void stockAdd(String a, String b, String c) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
-		sql = "select productnum from EXPIRATIONTABLE";
-		rs = null;
-		rs2 = stmt.executeQuery(sql);
+		String sql = "select productnum from EXPIRATIONTABLE";
+		ResultSet rs = null;
+		ResultSet rs2 = stmt.executeQuery(sql);
 		while (rs2.next()) {
 			String pNum = rs2.getString("productnum");
 			if (pNum.equals(a)) {
@@ -198,29 +194,26 @@ class stockAddr extends Stock {
 	}
 
 	public static void stockAdd2(String a, String b) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
-		rs = stmt.executeQuery("update SALESSTOCKTABLE" + " set stock = stock+" + b + " where productnum=" + a);
+		ResultSet rs = stmt
+				.executeQuery("update SALESSTOCKTABLE" + " set stock = stock+" + b + " where productnum=" + a);
 	}
 }
 
 class stockDelr extends Stock {
 	public static String stockDel(String a, String b, String c) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
 		String num = "0";// 들어온 수량값이 0인지 확인용
 		String stockVal = null;// 수량을 얼마나 제거 했는지 저장. 끝나고 반환
 		if (c.equals(num)) {
-			rs = stmt.executeQuery(
+			ResultSet rs = stmt.executeQuery(
 					"select * FROM EXPIRATIONTABLE" + " WHERE productnum=" + a + " and EXPIRYDATE='" + b + "'");
 			while (rs.next()) {
 				stockVal = rs.getString("stock");
 			}
-			rs2 = stmt.executeQuery(
+			ResultSet rs2 = stmt.executeQuery(
 					"DELETE FROM EXPIRATIONTABLE " + "WHERE productnum=" + a + " and EXPIRYDATE='" + b + "'");
 		} // 수량값이 0이면 해당 유통기한행의 전체 재고수 추출후 stockVal에 저장. 그후 그 행 전체 삭제
 		else {
-			rs2 = stmt.executeQuery("update EXPIRATIONTABLE " + "set stock=stock-" + c + " where productnum="
+			ResultSet rs2 = stmt.executeQuery("update EXPIRATIONTABLE " + "set stock=stock-" + c + " where productnum="
 					+ a + " and EXPIRYDATE='" + b + "'");
 			stockVal = c;
 		} // 0이 아니면 들어론 수량만큼 재고수 감수
@@ -228,8 +221,6 @@ class stockDelr extends Stock {
 	}
 
 	public static void stockDel2(String a, String b) throws SQLException {
-		con = ConnectDatabase.makeConnection();
-		stmt = con.createStatement();
-		rs = stmt.executeQuery("update SALESSTOCKTABLE " + "set stock=stock-" + b + " where productnum=" + a);
+		ResultSet rs = stmt.executeQuery("update SALESSTOCKTABLE " + "set stock=stock-" + b + " where productnum=" + a);
 	}
 }

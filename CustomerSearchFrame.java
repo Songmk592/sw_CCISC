@@ -10,7 +10,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 //거래처조회 화면
-public class CustomerSearchFrame extends JFrame {
+public class CustomerSearchFrame extends ConnectDatabase {
 	static String head[] = { "이름", "전화번호", "거래회사(번호)", "거래회사" };// 테이블 스키마
 	static String content[][] = {};// 테이블내용
 	static DefaultTableModel model = new DefaultTableModel(content, head);// 테이블
@@ -25,8 +25,11 @@ public class CustomerSearchFrame extends JFrame {
 	JPanel pa2 = new JPanel();// 정렬버튼과 스크롤패널을 담을 패널
 	JButton customerSearchBtn = new JButton("조회");// 거래처 조회버튼
 	JButton customerModBtn = new JButton("거래처 추가/제거");// 거래처 정보 수정 버튼
+	java.net.URL imageURL10 = getClass().getClassLoader().getResource("CCISCICON.png");
+	ImageIcon cciscIcon = new ImageIcon(imageURL10);
 
 	public CustomerSearchFrame() {
+		this.setIconImage(cciscIcon.getImage());
 		setSize(600, 330);
 		setLayout(null);
 		pa1.setLayout(new FlowLayout());
@@ -49,12 +52,10 @@ public class CustomerSearchFrame extends JFrame {
 
 	class myListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			Connection con = ConnectDatabase.makeConnection();
 			String manuNum = null;
 
 			if (e.getSource() == customerSearchBtn) {
 				try {
-					Statement stmt = con.createStatement();
 					String sql = "select MANUFACTURERNUM from MANUFACTURERTABLE";
 					ResultSet rs = stmt.executeQuery(sql);
 					JOptionPane temp = new JOptionPane();
@@ -68,6 +69,9 @@ public class CustomerSearchFrame extends JFrame {
 							error++;
 					}
 					if (error == 0) {
+						for (int i = customerSearch.getRowCount(); i > 0; i--) {
+		                     model.removeRow(i - 1);
+		                  }
 						temp.showMessageDialog(null, "조회할 거래처가 없습니다.");
 					} else
 						customerSearchr.customerSearch();
@@ -85,8 +89,6 @@ public class CustomerSearchFrame extends JFrame {
 
 class customerSearchr extends CustomerSearchFrame {
 	public static void customerSearch() throws SQLException {
-		Connection con = ConnectDatabase.makeConnection();
-		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(
 				"select PERSONINCHARGER, telephone,MANUFACTURERNUM,MANUFACTURERNAME" + " from manufacturertable");
 		for (int i = customerSearch.getRowCount(); i > 0; i--) {
